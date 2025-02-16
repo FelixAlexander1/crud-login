@@ -21,30 +21,43 @@ export const AuthProvider = ({ children }) => {
 
     const signup = async (user) => {
         try {
+            console.log("Datos enviados:", user); 
             const res = await registerRequest(user);
             console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error) {
-            console.log(error.response);
-            setErrors(error.response.data); 
+            console.error("Error en signup:", error);
+            console.log("Respuesta del servidor:", error.response?.data);
+            setErrors(error.response?.data || ["Error desconocido"]);
         }
     };
 
     const signin = async (user) => { 
         try {
             const res = await loginRequest(user);
-            console.log(res);
+            console.log("Respuesta del servidor:", res.data);
             setIsAuthenticated(true);
-            setUser(res.data);
-            
+            setUser(res.data); 
         } catch (error) {
+            console.error("Error en signin:", error);
+    
+            
+            if (!error.response) {
+                setErrors(["Error de red. No se pudo conectar con el servidor."]);
+                return;
+            }
+    
+            // Maneja errores esperados (por ejemplo, credenciales incorrectas)
             if (Array.isArray(error.response.data)) {
                 return setErrors(error.response.data);
             }
-            setErrors([error.response.data.message]);
+    
+            
+            setErrors([error.response.data?.message || "Error desconocido"]);
         }
     };
+    
 
     const logout = () => {
         Cookies.remove("token");

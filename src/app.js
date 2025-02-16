@@ -8,8 +8,18 @@ import taskRoutes from './routes/tasks.routes.js'
 
 const app = express();
 
-app.use(cors({origin: 'http://localhost:5173',
-    credentials: true
+// Permite múltiples orígenes
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, // Permite enviar cookies
 }));
 
 app.use(morgan('dev'));

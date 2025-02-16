@@ -14,11 +14,12 @@ function RegisterPage() {
         if (isAuthenticated)
             navigate("/tasks");
     }, [isAuthenticated]);
-
+    
 
     const onSubmit = handleSubmit(async (values) => {
-        signup(values)
-    })
+        console.log("Datos enviados al signup:", values); // Verificar datos
+        await signup(values);
+    });
 
 
     return (

@@ -22,7 +22,7 @@ function TaskFormPage() {
                 console.log(task)
                 setValue('title',task.title)
                 setValue('description',task.description)
-                setValue('date', dayjs.utc(task.date).format())
+                setValue('date', dayjs(task.date).utc().format('YYYY-MM-DD'))
             }
         }
         loadTask()
